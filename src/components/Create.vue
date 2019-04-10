@@ -1,6 +1,7 @@
 <template>
   <div class="create">
     <h1>create</h1>
+    <span>Client:</span>
   </div>
 </template>
 

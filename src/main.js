@@ -3,6 +3,19 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import firebase from 'firebase';
+
+const config = {
+  apiKey: "AIzaSyC4d_w6swFj2UMRn2JOmP5jxhOsKaF818Q",
+  authDomain: "crudis.firebaseapp.com",
+  databaseURL: "https://crudis.firebaseio.com",
+  projectId: "crudis",
+  storageBucket: "crudis.appspot.com",
+  messagingSenderId: "558310993037"
+};
+
+firebase.initializeApp(config);
+
 
 Vue.config.productionTip = false
 
