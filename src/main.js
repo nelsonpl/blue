@@ -4,6 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import firebase from 'firebase';
+import BootstrapVue from 'bootstrap-vue';
+
+Vue.use(BootstrapVue);
 
 const config = {
   apiKey: "AIzaSyC4d_w6swFj2UMRn2JOmP5jxhOsKaF818Q",
