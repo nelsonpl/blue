@@ -1,30 +1,21 @@
 <template>
   <div class="list">
     <b-container fluid>
-      <b-row class="mt-1 ml-1">
-        <div>
-          <input type="text" v-model="person.name" placeholder="Type your name...">
-          <input type="text" v-model="person.fone" placeholder="Type your fone...">
-          <input type="text" v-model="person.email" placeholder="Type your email...">
-          <input type="button" value="Add" @click="add()">
-        </div>
-        <div>
-          <div v-for="item in persons" :key="item.id">
-            <div>
-              <strong>ID:</strong>
-              <span>{{item.id}}</span>
-              <strong>Name:</strong>
-              <span>{{item.name}}</span>
-              <strong>Fone:</strong>
-              <span>{{item.fone}}</span>
-              <strong>e-mail:</strong>
-              <span>{{item.email}}</span>
-              <strong>LocationGeo:</strong>
-              <span>{{item.locationGeo}}</span>
-              <input type="button" value="Delete" @click="del(item.id)">
-            </div>
-          </div>
-        </div>
+        <b-form class="m-1" inline>
+          <b-input type="text" v-model="person.name" placeholder="Type your name..."></b-input>
+          <b-input type="text" class="ml-1" v-model="person.fone" placeholder="Type your fone..."></b-input>
+          <b-input type="text" class="ml-1" v-model="person.email" placeholder="Type your email..."></b-input>
+          <b-button variant="primary" class="ml-1" @click="add()">Add</b-button>
+        </b-form>
+      <b-row class="m-1">
+        <b-table striped hover :items="persons" :fields="fields">
+          <template slot="index" slot-scope="data">
+            {{ data.index + 1 }}
+          </template>
+          <template slot="actions" slot-scope="data">
+            <b-button @click="del(data.Id)">Del</b-button>
+          </template>
+        </b-table>
       </b-row>
     </b-container>
   </div>
@@ -37,6 +28,13 @@ export default {
   name: "list",
   data() {
     return {
+      fields: [
+        { key: 'index', label: '' }, 
+        { key: 'name', label: 'Name' }, 
+        { key: 'fone', label: 'Fone' }, 
+        { key: 'email', label: 'e-mail' }, 
+        { key: 'LocationGeo', label: 'Location Geo' },
+        { key: 'actions', label: '' }],
       person: { name: "", fone: "", email: "", locationGeo: {} },
       persons: []
     };

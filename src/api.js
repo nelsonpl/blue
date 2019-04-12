@@ -30,6 +30,7 @@ export default {
         console.log('onNext'); 
           snapshot.docChanges().forEach(function (change) {
             var entity = change.doc.data();
+            console.log(entity); 
             entity.id = change.doc.id;
             fnc(entity);
         });
@@ -39,10 +40,10 @@ export default {
       //onCompletion
       () =>{ console.log('query - completion'); });
 
-      setTimeout(()=>{  
-        console.info('unsubscribe');
-        unsubscribe();
-      }, 60000);
+      // setTimeout(()=>{  
+      //   console.info('unsubscribe');
+      //   unsubscribe();
+      // }, 60000);
     
 
   },
