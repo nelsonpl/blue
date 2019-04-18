@@ -3,22 +3,25 @@ import firebase from "firebase";
 
 export default {
   post(model) {
-    firebase.firestore()
-    .collection('persons')
-    .add(model)
-    .catch((reason)=>{
-    })
-    .then((value) => {
-    }, (reason) => {
-    })
-    .finally(()=>{
-    });;
+
+    if(model.id == null){
+        firebase.firestore().collection('task').add(model)
+          .catch((reason)=>{})
+          .then((value) => {}, (reason) => {})
+          .finally(()=>{});
+    }
+    else {
+      firebase.firestore().collection('task').doc(model.id).update(model)
+        .catch((reason)=>{})
+        .then((value) => {}, (reason) => {})
+        .finally(()=>{});
+    }
   },
   get() {
   },
   getAll(fnc) {
 
-    var query = firebase.firestore().collection('persons').limit(50);
+    var query = firebase.firestore().collection('task').limit(50);
 
     var unsubscribe = query.onSnapshot(
       //onNext 
@@ -43,7 +46,7 @@ export default {
   },
   del(id){
     firebase.firestore()
-    .collection('persons')
+    .collection('task')
     .doc(id)
     .delete()
     .catch((reason)=>{

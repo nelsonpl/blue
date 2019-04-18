@@ -2,11 +2,11 @@
   <div id="app">
     <header>
       <b-navbar toggleable="lg" type="dark" variant="info">
-        <b-navbar-brand href="#">Blue</b-navbar-brand>
+        <b-navbar-brand href="#">Todo Blue</b-navbar-brand>
       </b-navbar>
     </header>
     <main>
-          <router-view></router-view>
+      <router-view></router-view>
     </main>
   </div>
 </template>

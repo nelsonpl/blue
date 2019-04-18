@@ -1,19 +1,26 @@
 <template>
   <div class="list">
-    <b-container fluid>
-        <b-form class="m-1" inline>
-          <b-input type="text" v-model="person.name" placeholder="Type your name..."></b-input>
-          <b-input type="text" class="ml-1" v-model="person.fone" placeholder="Type your fone..."></b-input>
-          <b-input type="text" class="ml-1" v-model="person.email" placeholder="Type your email..."></b-input>
-          <b-button variant="primary" class="ml-1" @click="add()">Add</b-button>
-        </b-form>
+      <b-modal id="modal" @ok="handleOk" title="Edit">
+        <b-input type="text" v-model="taskModal.title" placeholder="Type your title..."></b-input>
+        <b-input type="text" v-model="taskModal.description" placeholder="Type your description..."></b-input>
+        <b-input type="date" v-model="taskModal.dueDate" placeholder="Type your dueDate..."></b-input>
+        <b-input type="text" v-model="taskModal.tag" placeholder="Type your tag..."></b-input>
+      </b-modal>
+
+    <b-container>
+
+      <b-row align-h="end" class="m-1">
+        <b-button v-b-modal.modal variant="success" @click="modalEdit()">Add</b-button>
+      </b-row>
+
       <b-row class="m-1">
-        <b-table striped hover :items="persons" :fields="fields">
+        <b-table striped hover :items="tasks" :fields="fields">
           <template slot="index" slot-scope="data">
             {{ data.index + 1 }}
           </template>
           <template slot="actions" slot-scope="data">
-            <b-button @click="del(data.Id)">Del</b-button>
+            <b-button variant="danger" @click="del(data.Id)">Del</b-button>
+            <b-button variant="primary" v-b-modal.modal @click="modalEdit(data.item)">Edit</b-button>
           </template>
         </b-table>
       </b-row>
@@ -25,46 +32,63 @@
 import api from "../api";
 
 export default {
-  name: "list",
+  description: "list",
   data() {
     return {
       fields: [
         { key: 'index', label: '' }, 
-        { key: 'name', label: 'Name' }, 
-        { key: 'fone', label: 'Fone' }, 
-        { key: 'email', label: 'e-mail' }, 
-        { key: 'LocationGeo', label: 'Location Geo' },
+        { key: 'title', label: 'Title' }, 
+        { key: 'description', label: 'Description' }, 
+        { key: 'dueDate', label: 'Due Date' }, 
+        { key: 'tag', label: 'Tag' }, 
         { key: 'actions', label: '' }],
-      person: { name: "", fone: "", email: "", locationGeo: {} },
-      persons: []
+      tasks: [],
+      taskModal: { title:"", description: "", dueDate: "", tag: ""}
     };
   },
   created() {
     var self = this;
-    this.list = api.getAll(person => {
-      if (self.persons.length) {
+    this.list = api.getAll(task => {
+      if (self.tasks.length) {
         var isAdd = false;
-        self.persons.forEach((item, index) => {
-          if (item.id === person.id) {
+        self.tasks.forEach((item, index) => {
+          if (item.id === task.id) {
             isAdd = true;
-            item.name = person.name;
-            item.fone = person.fone;
-            item.email = person.email;
-            item.locationGeo = person.locationGeo;
+            item.title = task.title;
+            item.description = task.description;
+            item.dueDate = task.dueDate;
+            item.tag = task.tag;
           }
         });
-        if (!isAdd) self.persons.push(person);
+        if (!isAdd) self.tasks.push(task);
       } else {
-        self.persons.push(person);
+        self.tasks.push(task);
       }
     });
   },
   methods: {
-    add() {
-      api.post(this.person);
-    },
     del(id) {
       api.del(id);
+    },
+    modalEdit(task){
+      if(task)
+      {
+        this.taskModal.id = task.id;
+        this.taskModal.title = task.title;
+        this.taskModal.description = task.description;
+        this.taskModal.dueDate = task.dueDate;
+        this.taskModal.tag = task.tag;
+      }
+      else {
+        this.taskModal.id = null;
+        this.taskModal.title = "";
+        this.taskModal.description = "";
+        this.taskModal.dueDate = "";
+        this.taskModal.tag = "";
+      }
+    },
+    handleOk(bvModalEvt){
+     api.post(this.taskModal);
     }
   }
 };
