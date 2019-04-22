@@ -45,13 +45,14 @@ export default {
   methods: {
     login() {
       var router = this.$router;
+      var self = this;
       firebase
         .auth()
         .signInWithEmailAndPassword(this.form.email, this.form.password)
         .catch((reason)=>{ 
           if(reason.code == "auth/user-not-found"){ 
             console.log('usuário não encontrado, criando...');
-            createUser();
+            self.createUser();
           }
          })
         .then((value) => { 
@@ -60,15 +61,17 @@ export default {
         .finally(()=>{ });
     },
     createUser(){
+      var self = this;
+      console.log('criando...');
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.form.email, this.form.password)
-        .catch((reason)=>{})
+        .catch((reason)=>{console.log('create - catch: ' + reason);})
         .then((value) => {           
           console.log('usuário criado, logando...');
-          login();
+          self.login();
         }, (reason) => {})
-        .finally(()=>{ });
+        .finally(()=>{console.log('create - finally');});
 
     },
     signinGoogle() {

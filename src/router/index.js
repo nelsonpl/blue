@@ -8,8 +8,16 @@ Vue.use(Router)
 
 let router = new Router({
   routes: [{
-      path: '/',
+      path: '/List',
       name: 'List',
+      component: List,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/',
+      name: '',
       component: List,
       meta: {
         requiresAuth: true
