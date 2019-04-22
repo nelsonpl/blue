@@ -3,6 +3,13 @@
     <header>
       <b-navbar toggleable="lg" type="dark" variant="info">
         <b-navbar-brand href="#">Todo Blue</b-navbar-brand>
+           <b-navbar-nav class="ml-auto">
+        <b-nav-item-dropdown right>
+          <!-- Using 'button-content' slot -->
+          <template slot="button-content"><em>User</em></template>
+          <b-dropdown-item @click="logout()">Sign Out</b-dropdown-item>
+        </b-nav-item-dropdown>
+      </b-navbar-nav>
       </b-navbar>
     </header>
     <main>
@@ -33,6 +40,14 @@ export default {
 
     firebase.auth().onAuthStateChanged(authStateObserver);
   },
+  methods: {
+    async logout() {
+      var router = this.$router;
+      firebase.auth().signOut().then(() => {
+          router.push("Login");
+        });
+    },
+  }
 };
 
 </script>
