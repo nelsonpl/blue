@@ -3,6 +3,10 @@ import firebase from "firebase";
 
 export default {
   post(model) {
+    
+    var userUid = firebase.auth().currentUser.uid;
+
+    model.userUid = userUid;
 
     if(model.id == null){
         firebase.firestore().collection('task').add(model)
@@ -21,7 +25,9 @@ export default {
   },
   getAll(fnc) {
 
-    var query = firebase.firestore().collection('task').limit(50);
+    var userUid = firebase.auth().currentUser.uid;
+
+    var query = firebase.firestore().collection('task').where('userUid', '==', userUid).limit(50);
 
     var unsubscribe = query.onSnapshot(
       //onNext 
