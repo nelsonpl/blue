@@ -45,33 +45,33 @@ export default {
   methods: {
     login() {
       var router = this.$router;
-      var self = this;
+      var self = this;      
       firebase
         .auth()
         .signInWithEmailAndPassword(this.form.email, this.form.password)
         .catch((reason)=>{ 
           if(reason.code == "auth/user-not-found"){ 
-            console.log('usuário não encontrado, criando...');
+            self.$bvToast.toast('usuário não encontrado, criando...', { title: 'Login', variant: 'default', solid: true });
             self.createUser();
           }
          })
         .then((value) => { 
-          console.log('logado');
         }, (reason) => {})
         .finally(()=>{ });
     },
     createUser(){
       var self = this;
-      console.log('criando...');
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.form.email, this.form.password)
-        .catch((reason)=>{console.log('create - catch: ' + reason);})
+        .catch((reason)=>{
+          self.$bvToast.toast('create - catch: ' + reason, { title: 'Login', variant: 'default', solid: true });
+          })
         .then((value) => {           
-          console.log('usuário criado, logando...');
+          self.$bvToast.toast('usuário criado, logando...', { title: 'Login', variant: 'default', solid: true });
           self.login();
         }, (reason) => {})
-        .finally(()=>{console.log('create - finally');});
+        .finally(()=>{});
 
     },
     signinGoogle() {

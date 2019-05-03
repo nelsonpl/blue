@@ -1,9 +1,9 @@
 <template>
   <div class="list">
-      <b-modal id="modal" @ok="handleOk" title="Edit">
-        <b-input type="text" v-model="taskModal.title" placeholder="Type your title..."></b-input>
-        <b-input type="text" v-model="taskModal.description" placeholder="Type your description..."></b-input>
-        <b-input type="date" v-model="taskModal.dueDate" placeholder="Type your dueDate..."></b-input>
+      <b-modal id="modal" @ok="handleOk" title="Task">
+        <b-input type="text" class="mb-2" v-model="taskModal.title"  required placeholder="Type your title..."></b-input>
+        <b-textarea type="text" class="mb-2" v-model="taskModal.description" placeholder="Type your description..."></b-textarea>
+        <b-input type="date" class="mb-2" v-model="taskModal.dueDate" placeholder="Type your dueDate..."></b-input>
         <b-input type="text" v-model="taskModal.tag" placeholder="Type your tag..."></b-input>
       </b-modal>
 
@@ -19,7 +19,7 @@
             {{ data.index + 1 }}
           </template>
           <template slot="actions" slot-scope="data">
-            <b-button variant="danger" @click="del(data.Id)">Del</b-button>
+            <b-button variant="danger" @click="del(data.item.id)">Del</b-button>
             <b-button variant="primary" v-b-modal.modal @click="modalEdit(data.item)">Edit</b-button>
           </template>
         </b-table>
@@ -68,7 +68,22 @@ export default {
   },
   methods: {
     del(id) {
-      api.del(id);
+      var self = this;
+      api.del(id)
+        .catch((reason)=>{
+        })
+        .then((value) => {
+          for(var i = 0;i < self.tasks.length; i++){
+            var item = self.tasks[i];
+            if(item.id == id){
+              self.tasks.splice(i, 1);
+              break;
+            }
+          }
+        }, (reason) => {
+        })
+        .finally(()=>{
+        });
     },
     modalEdit(task){
       if(task)

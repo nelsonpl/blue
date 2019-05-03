@@ -7,15 +7,17 @@ export default {
     var userUid = firebase.auth().currentUser.uid;
 
     model.userUid = userUid;
+    var id = model.id;
+    delete model.id;
 
-    if(model.id == null){
+    if(id == null){
         firebase.firestore().collection('task').add(model)
           .catch((reason)=>{})
           .then((value) => {}, (reason) => {})
           .finally(()=>{});
     }
     else {
-      firebase.firestore().collection('task').doc(model.id).update(model)
+      firebase.firestore().collection('task').doc(id).update(model)
         .catch((reason)=>{})
         .then((value) => {}, (reason) => {})
         .finally(()=>{});
@@ -51,16 +53,9 @@ export default {
 
   },
   del(id){
-    firebase.firestore()
+    return firebase.firestore()
     .collection('task')
     .doc(id)
-    .delete()
-    .catch((reason)=>{
-    })
-    .then((value) => {
-    }, (reason) => {
-    })
-    .finally(()=>{
-    });
+    .delete();
   }
 };
